@@ -1,9 +1,8 @@
 #pragma once
 
-#include "imgui/imgui.h"
-#include "imgui/examples/imgui_impl_glfw.h"
-#include "imgui/examples/imgui_impl_opengl3.h"
-#include "implot/implot.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include "Graphics/Application/PointCloudScene.h"
 #include "Graphics/Application/Renderer.h"

@@ -21,10 +21,10 @@ namespace FileManagement
 	*/
 	void clearTokens(std::vector<std::string>& stringTokens, std::vector<float>& floatTokens);
 
-	/**
-	*	@brief Opens an imagen from a system file.
-	*/
-	bool openImage(const std::string& filename, std::vector<unsigned char>* image, unsigned int& width, unsigned int& height);
+	///**
+	//*	@brief Opens an imagen from a system file.
+	//*/
+	//bool openImage(const std::string& filename, std::vector<unsigned char>* image, unsigned int& width, unsigned int& height);
 
 	/**
 	*	@brief
@@ -42,13 +42,13 @@ inline void FileManagement::clearTokens(std::vector<std::string>& stringTokens, 
 	stringTokens.clear();
 	floatTokens.clear();
 }
-
-inline bool FileManagement::openImage(const std::string& filename, std::vector<unsigned char>* image, unsigned int& width, unsigned int& height)
-{
-	unsigned error = lodepng::decode(*image, width, height, filename.c_str());
-
-	return error == 0;
-}
+//
+//inline bool FileManagement::openImage(const std::string& filename, std::vector<unsigned char>* image, unsigned int& width, unsigned int& height)
+//{
+//	unsigned error = lodepng::decode(*image, width, height, filename.c_str());
+//
+//	return error == 0;
+//}
 
 inline void FileManagement::readTokens(const std::string& line, const char delimiter, std::vector<std::string>& stringTokens, std::vector<float>& floatTokens)
 {

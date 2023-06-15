@@ -7,7 +7,6 @@
 #include "Graphics/Core/GraphicsCoreEnumerations.h"
 #include "Graphics/Core/Material.h"
 #include "Graphics/Core/ShaderProgram.h"
-#include "objloader/OBJ_Loader.h"
 
 class FBOScreenshot;
 class Group3D;
@@ -15,8 +14,6 @@ class TriangleMesh;
 class VAO;
 
 #define BINARY_EXTENSION ".bin"
-#define OBJ_EXTENSION ".obj"
-#define PLY_EXTENSION ".ply"
 
 /**
 *	@file Model3D.h
@@ -126,31 +123,6 @@ public:
 			strcpy(_materialName, emptyString.c_str());
 			strcpy(_mapKd, emptyString.c_str());
 			strcpy(_mapKs, emptyString.c_str());
-		}
-
-		/**
-		*	@brief Construction of description from the loading process.
-		*/
-		ModelComponentDescription(objl::Mesh* mesh)
-		{
-			if (!mesh->MeshName.empty())
-			{
-				strcpy(_modelName, mesh->MeshName.c_str());
-			}
-			else if (!mesh->MeshMaterial.name.empty())
-			{
-				strcpy(_modelName, mesh->MeshMaterial.name.c_str());
-			}
-
-			objl::Material* material = &mesh->MeshMaterial;
-
-			_kd = vec3(material->Kd.X, material->Kd.Y, material->Kd.Z);
-			_ks = vec3(material->Ks.X, material->Ks.Y, material->Ks.Z);
-			_ns = material->Ns;
-
-			strcpy(_materialName, material->name.c_str());
-			strcpy(_mapKd, material->map_Kd.c_str());
-			strcpy(_mapKs, material->map_Ks.c_str());
 		}
 
 		/**

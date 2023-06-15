@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Application/SSAOScene.h"
+#include "Graphics/Application/Scene.h"
 #include "Graphics/Core/PointCloud.h"
 #include "Graphics/Core/PointCloudAggregator.h"
 
@@ -16,7 +16,7 @@
 /**
 *	@brief Renderer of the point cloud.
 */
-class PointCloudScene: public SSAOScene
+class PointCloudScene: public Scene
 {
 protected:
 	// Settings constraints
@@ -30,6 +30,7 @@ protected:
 	// Rendering
 	RenderingShader*		_quadRenderer;
 	VAO*					_quadVAO;
+	Window*					_window;
 
 protected:
 	/**
@@ -76,6 +77,16 @@ public:
 	*	@brief Destructor. Frees memory allocated for 3d models.
 	*/
 	virtual ~PointCloudScene();
+
+	/**
+	*	@brief
+	*/
+	void filterPointCloudByHeight(const uvec2& subdivisions);
+
+	/**
+	*	@return Y / X factor from the point cloud's size.
+	*/
+	float getPointCloudScaleFactor();
 
 	/**
 	*	@return True if the point cloud was successfully loaded.

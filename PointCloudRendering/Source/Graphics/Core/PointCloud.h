@@ -10,6 +10,10 @@
 *	@date 09/24/2020
 */
 
+#define LAS_EXTENSION ".las"
+#define LAZ_EXTENSION ".laz"
+#define PLY_EXTENSION ".ply"
+
 /**
 *	@brief 
 */
@@ -20,6 +24,14 @@ public:
 	{
 		vec3		_point;
 		unsigned	_rgb;
+
+		vec3		_normal;
+		unsigned	_returnClass;
+
+		/**
+		*	@brief Encodes return id and number of returns.
+		*/
+		static unsigned encodeReturnsClass(float returnNumber, float numReturns, float classId) { return glm::packUnorm4x8(vec4(returnNumber, numReturns, classId, .0f)); }
 
 		/**
 		*	@return RGB color packed as a single unsigned value. 
@@ -38,15 +50,22 @@ public:
 	};
 
 protected:
-	const static std::string	WRITE_POINT_CLOUD_FOLDER;			//!<
+	const static std::string	WRITE_POINT_CLOUD_FOLDER;					//!<
 
 protected:
 	std::string					_filename;									//!<
+
+	bool						_calculatedNormals;							//!<
 	bool						_useBinary;									//!<
 
 	// Spatial information
 	AABB						_aabb;										//!<
-	std::vector<PointModel>		_points;									//!<			
+	float						_lidarBeamWidth;							//!<
+	std::vector<PointModel>		_points;									//!<
+
+	// Radiometric information
+	float						_minColor, _maxColor, _maxReturns;			//!<
+	unsigned					_maxClassId;								//!<
 
 protected:
 	/**
@@ -55,12 +74,22 @@ protected:
 	void computeCloudData();
 
 	/**
+	*	@brief Computes normal vectors with PCL.
+	*/
+	void computeNormals();
+
+	/**
 	*	@brief Fills the content of model component with binary file data.
 	*/
 	bool loadModelFromBinaryFile();
 
 	/**
-	*	@brief Generates geometry via GPU.
+	*	@brief 
+	*/
+	bool loadModelFromLAS(const mat4& modelMatrix);
+
+	/**
+	*	@brief 
 	*/
 	bool loadModelFromPLY(const mat4& modelMatrix);
 
@@ -124,6 +153,26 @@ public:
 	*	@return Path where the point cloud is saved.
 	*/
 	std::string getFilename() { return _filename; }
+
+	/**
+	*	@return Minimum intensity.
+	*/
+	unsigned getMaxClassId() { return _maxClassId; }
+
+	/**
+	*	@return Minimum intensity.
+	*/
+	float getMaxColor() { return _maxColor; }
+
+	/**
+	*	@return Maximum number of returns.
+	*/
+	float getMaxReturns() { return _maxReturns; }
+
+	/**
+	*	@return Minimum intensity.
+	*/
+	float getMinColor() { return _minColor; }
 
 	/**
 	*	@brief

@@ -12,8 +12,12 @@
 struct PointCloudParameters
 {
 public:
+	inline static bool		_buildDTM = true;					//!<
+	inline static bool		_computeNormal = false;				//!<
 	inline static float		_distanceThreshold = 1.01f;			//!<
 	inline static bool		_enableHQR = true;					//!<
+	inline static GLint		_knn = 8;							//!<
+	inline static ivec2		_numGridSubdivisions = ivec2(100);	//!<
 	inline static bool		_sortPointCloud = true;				//!<
 	inline static bool		_reducePointCloud = false;			//!<
 	inline static GLuint	_reduceIterations = 1;				//!<

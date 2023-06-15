@@ -20,22 +20,10 @@ struct CGAppEnum
 		VIS_ALL_TOGETHER
 	};
 
-	// Drawable scenes
-	enum SceneNames : uint8_t
-	{
-		TERRAIN_SCENE,
-		CAD_SCENE
-	};
-
 	/**
 	*	@return Number of different visualization modes.
 	*/
 	const static GLsizei numVisualizationModes() { return VIS_ALL_TOGETHER + 1; }
-
-	/**
-	*	@return Number of drawable scenes.
-	*/
-	const static GLsizei numAvailableScenes() { return CAD_SCENE + 1; }
 
 
 	// Application prebuilt materials

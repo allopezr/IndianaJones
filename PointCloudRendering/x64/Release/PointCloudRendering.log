@@ -1,8 +1,8 @@
-﻿  PointCloudScene.cpp
-     Creando biblioteca D:\Github\PointCloudRendering\x64\Release\PointCloudRendering.lib y objeto D:\Github\PointCloudRendering\x64\Release\PointCloudRendering.exp
+﻿  PointCloudAggregator.cpp
+     Creando biblioteca C:\Users\allopezr\Documents\GitHub\IndianaJones\x64\Release\PointCloudRendering.lib y objeto C:\Users\allopezr\Documents\GitHub\IndianaJones\x64\Release\PointCloudRendering.exp
   Generando código
-  190 of 8964 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
+  19 of 5944 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    63 functions had inline decision re-evaluated but remain unchanged
+    16 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
-  PointCloudRendering.vcxproj -> D:\Github\PointCloudRendering\x64\Release\PointCloudRendering.exe
+  PointCloudRendering.vcxproj -> C:\Users\allopezr\Documents\GitHub\IndianaJones\x64\Release\PointCloudRendering.exe

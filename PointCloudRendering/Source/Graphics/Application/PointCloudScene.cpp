@@ -5,9 +5,9 @@
 #include <regex>
 #include "Graphics/Application/Renderer.h"
 #include "Graphics/Application/TextureList.h"
-#include "Graphics/Core/CADModel.h"
 #include "Graphics/Core/Light.h"
 #include "Graphics/Core/OpenGLUtilities.h"
+#include "Graphics/Core/ShaderList.h"
 
 /// Initialization of static attributes
 const std::string PointCloudScene::SCENE_CAMERA_FILE = "Camera.txt";
@@ -22,12 +22,30 @@ PointCloudScene::PointCloudScene() : _pointCloud(nullptr), _pointCloudAggregator
 	_pointCloudAggregator = new PointCloudAggregator();
 	_quadRenderer = shaderList->getRenderingShader(RendEnum::DEBUG_QUAD_SHADER);
 	_quadVAO = Primitives::getQuadVAO();
+	_window = Window::getInstance();
 }
 
 PointCloudScene::~PointCloudScene()
 {
 	delete _pointCloud;
 	delete _pointCloudAggregator;
+}
+
+void PointCloudScene::filterPointCloudByHeight(const uvec2& subdivisions)
+{
+	if (_pointCloudAggregator)
+		_pointCloudAggregator->filterByHeight(subdivisions);
+}
+
+float PointCloudScene::getPointCloudScaleFactor()
+{
+	if (_pointCloud)
+	{
+		vec3 aabb_size = _pointCloud->getAABB().size();
+		return aabb_size.y / aabb_size.x;
+	}
+	
+	return .0f;
 }
 
 bool PointCloudScene::loadPointCloud(const std::string& path)
@@ -41,22 +59,20 @@ bool PointCloudScene::loadPointCloud(const std::string& path)
 
 	if (Renderer::getInstance()->getRenderingParameters()->_updateCamera) this->loadDefaultCamera(_cameraManager->getActiveCamera());
 
-	std::cout << _pointCloud->getNumberOfPoints() << std::endl;
-
 	return true;
 }
 
 void PointCloudScene::modifySize(const uint16_t width, const uint16_t height)
 {
-	Scene::modifySize(width, height);
+	this->modifySize(width, height);
 
 	_pointCloudAggregator->changedSize(width, height);
 }
 
 void PointCloudScene::render(const mat4& mModel, RenderingParameters* rendParams)
 {
-	this->bindDefaultFramebuffer(rendParams);	
-	this->renderPointCloud(mModel, rendParams);
+	Scene::bindDefaultFramebuffer(rendParams);	
+	this->drawAsPoints(mModel, rendParams);
 }
 
 // [Protected methods]
@@ -106,12 +122,8 @@ void PointCloudScene::loadLights()
 
 void PointCloudScene::loadModels()
 {
-	{
-		_sceneGroup = new Group3D;
-		_pointCloudAggregator = new PointCloudAggregator();
-	}
-	
-	SSAOScene::loadModels();
+	_sceneGroup = new Group3D;
+	_pointCloudAggregator = new PointCloudAggregator();
 }
 
 void PointCloudScene::bindTexture(GLuint textureID, ShaderProgram* shader, const std::string& uniformName, unsigned offset)

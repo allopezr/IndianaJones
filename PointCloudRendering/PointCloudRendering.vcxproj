@@ -21,16 +21,6 @@
   <ItemGroup>
     <ClInclude Include="Libraries\imfiledialog\ImGuiFileDialog.h" />
     <ClInclude Include="Libraries\imfiledialog\ImGuiFileDialogConfig.h" />
-    <ClInclude Include="Libraries\imgui\examples\imgui_impl_glfw.h" />
-    <ClInclude Include="Libraries\imgui\examples\imgui_impl_opengl3.h" />
-    <ClInclude Include="Libraries\imgui\imconfig.h" />
-    <ClInclude Include="Libraries\imgui\imgui.h" />
-    <ClInclude Include="Libraries\imgui\imgui_internal.h" />
-    <ClInclude Include="Libraries\imgui\imstb_truetype.h" />
-    <ClInclude Include="Libraries\imnodes\imnodes.h" />
-    <ClInclude Include="Libraries\implot\implot.h" />
-    <ClInclude Include="Libraries\implot\implot_internal.h" />
-    <ClInclude Include="Libraries\lodepng\lodepng.h" />
     <ClInclude Include="Source\Geometry\2D\Vector2.h" />
     <ClInclude Include="Source\Geometry\3D\AABB.h" />
     <ClInclude Include="Source\Geometry\3D\Edge3D.h" />
@@ -57,13 +47,11 @@
     <ClInclude Include="Source\Graphics\Application\TerrainParameters.h" />
     <ClInclude Include="Source\Graphics\Application\Renderer.h" />
     <ClInclude Include="Source\Graphics\Application\RenderingParameters.h" />
-    <ClInclude Include="Source\Graphics\Application\SSAOScene.h" />
     <ClInclude Include="Source\Graphics\Application\Scene.h" />
     <ClInclude Include="Source\Graphics\Application\TextureList.h" />
     <ClInclude Include="Source\Graphics\Core\AmbientLight.h" />
     <ClInclude Include="Source\Graphics\Core\PointCloudAggregator.h" />
     <ClInclude Include="Source\Graphics\Core\BasicAttenuation.h" />
-    <ClInclude Include="Source\Graphics\Core\CADModel.h" />
     <ClInclude Include="Source\Graphics\Core\Camera.h" />
     <ClInclude Include="Source\Graphics\Core\CameraProjection.h" />
     <ClInclude Include="Source\Graphics\Core\ColorUtilities.h" />
@@ -85,7 +73,6 @@
     <ClInclude Include="Source\Graphics\Core\PerspProjection.h" />
     <ClInclude Include="Source\Graphics\Core\PointCloud.h" />
     <ClInclude Include="Source\Graphics\Core\PixarAttenuation.h" />
-    <ClInclude Include="Source\Graphics\Core\PlanarSurface.h" />
     <ClInclude Include="Source\Graphics\Core\PointLight.h" />
     <ClInclude Include="Source\Graphics\Core\RangedAttenuation.h" />
     <ClInclude Include="Source\Graphics\Core\RenderingShader.h" />
@@ -98,8 +85,6 @@
     <ClInclude Include="Source\Graphics\Core\Texture.h" />
     <ClInclude Include="Source\Graphics\Core\VAO.h" />
     <ClInclude Include="Source\Graphics\Core\ImageUtilities.h" />
-    <ClInclude Include="Libraries\objloader\OBJ_Loader.h" />
-    <ClInclude Include="Libraries\tinyply\tinyply.h" />
     <ClInclude Include="Source\Interface\Fonts\font_awesome.hpp" />
     <ClInclude Include="Source\Interface\Fonts\IconsFontAwesome5.h" />
     <ClInclude Include="Source\Interface\Fonts\lato.hpp" />
@@ -114,79 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Libraries\imfiledialog\ImGuiFileDialog.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\examples\imgui_impl_glfw.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\examples\imgui_impl_opengl3.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_demo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_draw.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_tables.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Libraries\imnodes\imnodes.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\implot\implot.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\implot\implot_demo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\implot\implot_items.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\lodepng\lodepng.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Libraries\tinyply\tinyply.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -211,14 +123,12 @@
     <ClCompile Include="Source\Graphics\Application\CameraManager.cpp" />
     <ClCompile Include="Source\Graphics\Application\MaterialList.cpp" />
     <ClCompile Include="Source\Graphics\Application\Renderer.cpp" />
-    <ClCompile Include="Source\Graphics\Application\SSAOScene.cpp" />
     <ClCompile Include="Source\Graphics\Application\Scene.cpp" />
     <ClCompile Include="Source\Graphics\Application\TextureList.cpp" />
     <ClCompile Include="Source\Graphics\Core\AmbientLight.cpp" />
     <ClCompile Include="Source\Graphics\Core\PointCloudAggregator.cpp" />
     <ClCompile Include="Source\Graphics\Core\Antialiser.cpp" />
     <ClCompile Include="Source\Graphics\Core\BasicAttenuation.cpp" />
-    <ClCompile Include="Source\Graphics\Core\CADModel.cpp" />
     <ClCompile Include="Source\Graphics\Core\Camera.cpp" />
     <ClCompile Include="Source\Graphics\Core\ComputeShader.cpp" />
     <ClCompile Include="Source\Graphics\Core\DirectionalLight.cpp" />
@@ -235,7 +145,6 @@
     <ClCompile Include="Source\Graphics\Core\PerspProjection.cpp" />
     <ClCompile Include="Source\Graphics\Core\PointCloud.cpp" />
     <ClCompile Include="Source\Graphics\Core\PixarAttenuation.cpp" />
-    <ClCompile Include="Source\Graphics\Core\PlanarSurface.cpp" />
     <ClCompile Include="Source\Graphics\Core\PointLight.cpp" />
     <ClCompile Include="Source\Graphics\Core\RangedAttenuation.cpp" />
     <ClCompile Include="Source\Graphics\Core\RenderingShader.cpp" />
@@ -247,7 +156,6 @@
     <ClCompile Include="Source\Graphics\Core\SSAOFBO.cpp" />
     <ClCompile Include="Source\Graphics\Core\Texture.cpp" />
     <ClCompile Include="Source\Graphics\Core\VAO.cpp" />
-    <ClCompile Include="Libraries\objloader\OBJ_Loader.cpp" />
     <ClCompile Include="Source\Interface\Fonts\font_awesome.cpp" />
     <ClCompile Include="Source\Interface\Fonts\font_awesome_2.cpp" />
     <ClCompile Include="Source\Interface\Fonts\lato.cpp" />
@@ -267,7 +175,6 @@
     <None Include="Assets\Shaders\2D\blurSSAOShader-vert.glsl" />
     <None Include="Assets\Shaders\2D\ssaoShader-frag.glsl" />
     <None Include="Assets\Shaders\2D\ssaoShader-vert.glsl" />
-    <None Include="Assets\Shaders\Compute\BVHGeneration\endLoopComputations-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Generic\resetBufferIndex-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Model\computeFaceAABB-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Model\computeNormals-comp.glsl" />
@@ -277,6 +184,7 @@
     <None Include="Assets\Shaders\Compute\PointCloud\computeDepthBuffer-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\computeDepthBufferHQR-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\computeMortonCodes-comp.glsl" />
+    <None Include="Assets\Shaders\Compute\PointCloud\computePointIdx-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\iota-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\reducePointBuffer-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\resetDepthBuffer-comp.glsl" />
@@ -284,22 +192,12 @@
     <None Include="Assets\Shaders\Compute\PointCloud\storeTexture-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\storeTextureHQR-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PointCloud\transferPoints-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\RadixSort\bitMask-radixSort-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\BVHGeneration\buildClusterBuffer-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\BVHGeneration\clusterMerging-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Group\computeGroupAABB-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\BVHGeneration\computeMortonCodes-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Model\computeTangents_1-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Model\computeTangents_2-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\PrefixScan\downSweep-prefixScan-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\BVHGeneration\findBestNeighbor-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Model\modelMeshGeneration-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Model\modelApplyModelMatrix-comp.glsl" />
     <None Include="Assets\Shaders\Compute\PlanarSurface\planarSurfaceGeometryTopology-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\BVHGeneration\reallocateClusters-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\RadixSort\reallocateIndices-radixSort-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\PrefixScan\reduce-prefixScan-comp.glsl" />
-    <None Include="Assets\Shaders\Compute\PrefixScan\resetLastPosition-prefixScan-comp.glsl" />
     <None Include="Assets\Shaders\Compute\Templates\constraints.glsl" />
     <None Include="Assets\Shaders\Compute\Templates\modelStructs.glsl" />
     <None Include="Assets\Shaders\Compute\Templates\random.glsl" />
@@ -327,26 +225,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -407,15 +305,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Source;Source/PrecompiledHeaders;%userprofile%/Desktop/Libraries/glew/include;%userprofile%/Desktop/Libraries/glm;%userprofile%/Desktop/Libraries/glfw/include;%userprofile%/Desktop/Libraries/FastNoise2/include;Libraries/;Libraries/lodepng;Libraries/imgui;Libraries/imgui/examples;Libraries/implot;Libraries/tinyply;Libraries/objloader;Libraries/spline</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;Source/PrecompiledHeaders;Libraries</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%userprofile%/Desktop/Libraries/glew/lib/Release/x64;%userprofile%/Desktop/Libraries/glfw/lib-vc2019;%userprofile%/Desktop/Libraries/FastNoise2/lib;D:\PDAL-master\build\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;FastNoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Libraries/CSF/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -451,17 +350,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Source;Source/PrecompiledHeaders;%userprofile%/Desktop/Libraries/glew/include;%userprofile%/Desktop/Libraries/glm;%userprofile%/Desktop/Libraries/glfw/include;%userprofile%/Desktop/Libraries/FastNoise2/include;Libraries/;Libraries/lodepng;Libraries/imgui;Libraries/imgui/examples;Libraries/implot;Libraries/tinyply;Libraries/objloader;Libraries/spline</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;Source/PrecompiledHeaders;Libraries</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%userprofile%/Desktop/Libraries/glew/lib/Release/x64;%userprofile%/Desktop/Libraries/glfw/lib-vc2019;%userprofile%/Desktop/Libraries/FastNoise2/lib;D:\PDAL-master\build\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;FastNoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Libraries/CSF/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

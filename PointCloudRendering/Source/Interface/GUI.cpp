@@ -118,7 +118,7 @@ void GUI::showControls()
 
 void GUI::showFileDialog()
 {
-	ImGuiFileDialog::Instance()->OpenDialog("Choose Point Cloud", "Choose File", ".ply", ".");
+	ImGuiFileDialog::Instance()->OpenDialog("Choose Point Cloud", "Choose File", ".las,.ply", ".");
 
 	// display
 	if (ImGuiFileDialog::Instance()->Display("Choose Point Cloud"))
@@ -155,6 +155,7 @@ void GUI::showPointCloudDialog()
 		ImGui::SameLine(0, 80); ImGui::PushItemWidth(150.0f);
 		ImGui::SliderScalar("Iterations", ImGuiDataType_U16, &PointCloudParameters::_reduceIterations, &minIterations, &maxIterations);
 		ImGui::Checkbox("Update camera", &_renderingParams->_updateCamera);
+		ImGui::Checkbox("Compute normals", &PointCloudParameters::_computeNormal); ImGui::SameLine(0, 20); ImGui::SliderInt("KNN Neighbors", &PointCloudParameters::_knn, 3, 50);
 		ImGui::PopItemWidth();
 
 		ImGui::PushID(0);
@@ -201,23 +202,21 @@ void GUI::showRenderingSettings()
 				ImGui::Separator();
 				ImGui::Text(ICON_FA_TREE "Scenario");
 
-				ImGui::Checkbox("Render scenario", &_renderingParams->_showTriangleMesh);
+				//{
+				//	ImGui::Spacing();
 
-				{
-					ImGui::Spacing();
+				//	ImGui::NewLine();
+				//	ImGui::SameLine(30, 0);
+				//	ImGui::Checkbox("Screen Space Ambient Occlusion", &_renderingParams->_ambientOcclusion);
 
-					ImGui::NewLine();
-					ImGui::SameLine(30, 0);
-					ImGui::Checkbox("Screen Space Ambient Occlusion", &_renderingParams->_ambientOcclusion);
+				//	const char* visualizationTitles[] = { "Points", "Lines", "Triangles", "All" };
+				//	ImGui::NewLine();
+				//	ImGui::SameLine(30, 0);
+				//	ImGui::PushItemWidth(200.0f);
+				//	ImGui::Combo("Visualization", &_renderingParams->_visualizationMode, visualizationTitles, IM_ARRAYSIZE(visualizationTitles));
 
-					const char* visualizationTitles[] = { "Points", "Lines", "Triangles", "All" };
-					ImGui::NewLine();
-					ImGui::SameLine(30, 0);
-					ImGui::PushItemWidth(200.0f);
-					ImGui::Combo("Visualization", &_renderingParams->_visualizationMode, visualizationTitles, IM_ARRAYSIZE(visualizationTitles));
-
-					ImGui::Spacing();
-				}
+				//	ImGui::Spacing();
+				//}
 
 				ImGui::EndTabItem();
 			}
@@ -239,16 +238,38 @@ void GUI::showRenderingSettings()
 				ImGui::ColorEdit3("Point Cloud Color", &_renderingParams->_scenePointCloudColor[0]);
 				ImGui::Checkbox("HQR Rendering Optimization", &PointCloudParameters::_enableHQR);
 				ImGui::SliderFloat("Depth Threshold", &PointCloudParameters::_distanceThreshold, 1.0f, 1.2f, "%.6f");
-				
-				ImGui::EndTabItem();
-			}
+				ImGui::SliderFloat("Return Factor", &_renderingParams->_returnFactor, .0f, 1.1f, "%.3f");
+				ImGui::InputInt("Maximum Class", &_renderingParams->_classRange[1], 0);
+				ImGui::InputInt("Minimum Class", &_renderingParams->_classRange[0], 0);
 
-			if (ImGui::BeginTabItem("Wireframe"))
-			{
+				this->leaveSpace(2);
+				ImGui::Text("Rendering Mode");
+				ImGui::Separator();
 				this->leaveSpace(1);
 
-				ImGui::ColorEdit3("Wireframe Color", &_renderingParams->_wireframeColor[0]);
+				ImGui::RadioButton("RGB", &_renderingParams->_visualizationMode, RenderingParameters::RGB); ImGui::SameLine(0, 20); ImGui::Checkbox("Normalized", &_renderingParams->_normalizedColor);
+				ImGui::RadioButton("Normal Vector", &_renderingParams->_visualizationMode, RenderingParameters::NORMAL);
+				ImGui::RadioButton("Height", &_renderingParams->_visualizationMode, RenderingParameters::HEIGHT);
+				ImGui::RadioButton("Class", &_renderingParams->_visualizationMode, RenderingParameters::CLASS);
+				ImGui::Checkbox("Filter by Height", &_renderingParams->_filterByHeight);
 
+				this->leaveSpace(2);
+				ImGui::Text("Simplify");
+				ImGui::Separator();
+				this->leaveSpace(1);
+
+				ImGui::PushItemWidth(420.0f);
+				ImGui::SliderInt2("Number of Subdivisions", &PointCloudParameters::_numGridSubdivisions[0], 0, 10000);
+				if (ImGui::Button("Compute Filtering"))
+					_pointCloudScene->filterPointCloudByHeight(PointCloudParameters::_numGridSubdivisions);
+				ImGui::SameLine(0, 10);
+				if (ImGui::Button("Rescale X"))
+					PointCloudParameters::_numGridSubdivisions.y = PointCloudParameters::_numGridSubdivisions.x * _pointCloudScene->getPointCloudScaleFactor();
+				ImGui::SameLine(0, 10);
+				ImGui::Checkbox("Build DTM", &PointCloudParameters::_buildDTM);
+
+				ImGui::PopItemWidth();
+				
 				ImGui::EndTabItem();
 			}
 
@@ -298,7 +319,6 @@ void GUI::showScreenshotSettings()
 
 GUI::~GUI()
 {
-	ImPlot::DestroyContext();
 	ImGui::DestroyContext();
 }
 
@@ -310,7 +330,6 @@ void GUI::initialize(GLFWwindow* window, const int openGLMinorVersion)
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImPlot::CreateContext();
 
 	this->loadImGUIStyle();
 	

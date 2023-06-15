@@ -6,6 +6,8 @@
 *.obj
 *.ply
 *.xyz
+*.las
+*.laz
 
 # Prerequisites
 *.d

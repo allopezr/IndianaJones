@@ -13,35 +13,16 @@ const std::string Renderer::SCENE_INDEX_FILENAME = "Settings/SceneIndex.txt";
 /// [Protected methods]
 
 Renderer::Renderer() :
+	_currentScene(0),
 	_screenshotFBO(nullptr),
-	_scene(CGAppEnum::numAvailableScenes()),
+	_scene(1),
 	_state(std::unique_ptr<RenderingParameters>(new RenderingParameters()))
 {
-	_currentScene = this->readSceneIndex();
 }
 
-SSAOScene* Renderer::createScene(const uint8_t sceneType)
+Scene* Renderer::createScene(const uint8_t sceneType)
 {
 	return new PointCloudScene();
-}
-
-uint8_t Renderer::readSceneIndex()
-{
-	int index;
-	uint8_t scene = CGAppEnum::TERRAIN_SCENE;		// Default
-
-	// Read file
-	std::ifstream fin(SCENE_INDEX_FILENAME, std::ios::in);
-	if (fin.is_open())
-	{
-		fin >> index;
-		
-		scene = glm::clamp(index, (int) CGAppEnum::TERRAIN_SCENE, (int) CGAppEnum::CAD_SCENE);
-	}
-
-	fin.close();
-
-	return scene;
 }
 
 /// [Public methods]
@@ -82,7 +63,7 @@ void Renderer::prepareOpenGL(const uint16_t width, const uint16_t height)
 
 	// [Scenes]
 
-	_scene[_currentScene] = std::unique_ptr<SSAOScene>(createScene(_currentScene));
+	_scene[_currentScene] = std::unique_ptr<Scene>(createScene(_currentScene));
 	_scene[_currentScene]->load();
 
 	// [Framebuffers]

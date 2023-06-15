@@ -16,8 +16,50 @@ layout (std430, binding = 3) buffer PointBuffer		{ PointModel	points[]; };
 
 uniform mat4	cameraMatrix;
 uniform float	distanceThreshold;
+uniform uint	maxClassId;
 uniform uint	numPoints;
 uniform uvec2	windowSize;
+
+uniform vec2		minMaxHeight, minMaxColor;
+uniform sampler2D	paletteTexture;
+
+subroutine vec3 colorType(uint index);
+subroutine uniform colorType colorUniform;
+
+subroutine(colorType)
+vec3 rgbColor(uint index)
+{
+	//vec2 returnIds = unpackHalf2x16(points[index].returnData);
+	//float pointReturnFactor = returnIds.x / returnIds.y;
+
+	//return vec3(pointReturnFactor) * 255.0f;
+	return unpackUnorm4x8(points[index].rgb).rgb * 255.0f;
+}
+
+subroutine(colorType)
+vec3 rgbNormalizedColor(uint index)
+{
+	return vec3((points[index].rgb - minMaxColor.x) / (minMaxColor.y - minMaxColor.x)) * 255.0f;
+}
+
+subroutine(colorType)
+vec3 normalColor(uint index)
+{
+	return texture(paletteTexture, vec2(.5f, abs(dot(vec3(.0f, 1.0f, .0f), points[index].normal)))).rgb * 255.0f;
+}
+
+subroutine(colorType)
+vec3 heightColor(uint index)
+{
+	return texture(paletteTexture, vec2(.5f, (points[index].point.z - minMaxHeight.x) / (minMaxHeight.y - minMaxHeight.x))).rgb * 255.0f;
+}
+
+subroutine(colorType)
+vec3 classColor(uint index)
+{
+	return texture(paletteTexture, vec2(.5f, unpackUnorm4x8(points[index].returnClassData).z * 256.0f / maxClassId)).rgb * 255.0f;
+}
+
 
 void main()
 {
@@ -36,7 +78,7 @@ void main()
 	int pointIndex			= int(windowPosition.y * windowSize.x + windowPosition.x);
 	float depth				= projectedPoint.w;
 	float depthInBuffer		= uintBitsToFloat(depthBuffer[pointIndex]);
-	uvec3 rgbColor			= uvec3(unpackUnorm4x8(points[index].rgb).rgb * 255.0f);
+	uvec3 rgbColor			= uvec3(colorUniform(index));
 
 	if (depth < depthInBuffer * distanceThreshold)			// Same surface
 	{

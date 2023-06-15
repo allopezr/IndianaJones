@@ -21,15 +21,18 @@ protected:
 	// SSBO
 	std::vector<GLuint>		_pointCloudSSBO;
 	std::vector<GLuint>		_pointCloudChunkSize;
+	std::vector<GLuint>		_visibilitySSBO;
 	GLuint					_depthBufferSSBO, _rawDepthBufferSSBO, _color01SSBO, _color02SSBO;
 	std::vector<Point>		_supportBuffer;
 
 	// OpenGL Texture
+	Texture*				_inferno;
 	GLuint					_textureID;
 
 	// Shaders
 	ComputeShader*			_addColorsHQRShader;
 	ComputeShader*			_projectionShader, *_projectionHQRShader;
+	ComputeShader*			_projectionFilterShader;
 	ComputeShader*			_resetDepthBufferShader, * _resetDepthBufferHQRShader;
 	ComputeShader*			_storeTexture, *_storeHQRTexture;
 
@@ -120,6 +123,11 @@ public:
 	*	@brief Modifies size of buffer affected by the size of the window. 
 	*/
 	void changedSize(const uint16_t width, const uint16_t height);
+
+	/**
+	*	@brief Filters point cloud by selecting the one with minimum height at each cell.
+	*/
+	void filterByHeight(const uvec2& subdivisions);
 
 	/**
 	*	@return Identifier of image texture with point cloud colors. 

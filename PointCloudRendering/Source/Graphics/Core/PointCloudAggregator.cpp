@@ -21,6 +21,7 @@ PointCloudAggregator::PointCloudAggregator() :
 	_resetDepthBufferShader = shaderList->getComputeShader(RendEnum::RESET_DEPTH_BUFFER_SHADER);
 	_resetDepthBufferHQRShader = shaderList->getComputeShader(RendEnum::RESET_DEPTH_BUFFER_HQR_SHADER);
 	_projectionShader		= shaderList->getComputeShader(RendEnum::PROJECTION_SHADER);
+	_projectionFilterShader	= shaderList->getComputeShader(RendEnum::PROJECTION_FILTER_SHADER);
 	_projectionHQRShader	= shaderList->getComputeShader(RendEnum::PROJECTION_HQR_SHADER);
 	_storeTexture			= shaderList->getComputeShader(RendEnum::STORE_TEXTURE_SHADER);
 	_storeHQRTexture		= shaderList->getComputeShader(RendEnum::STORE_TEXTURE_HQR_SHADER);
@@ -38,6 +39,9 @@ PointCloudAggregator::PointCloudAggregator() :
 	glBindTexture(GL_TEXTURE_2D, _textureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _windowSize.x, _windowSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	glGenerateMipmap(GL_TEXTURE_2D);
+
+	// Palette
+	_inferno = new Texture("Assets/Textures/Inferno.png");
 }
 
 PointCloudAggregator::~PointCloudAggregator()
@@ -48,12 +52,114 @@ PointCloudAggregator::~PointCloudAggregator()
 	glDeleteBuffers(1, &_depthBufferSSBO);
 	glDeleteBuffers(1, &_rawDepthBufferSSBO);
 	glDeleteTextures(1, &_textureID);
+	delete _inferno;
 }
 
 void PointCloudAggregator::changedSize(const uint16_t width, const uint16_t height)
 {
 	_windowSize = ivec2(width, height);
 	_changedWindowSize = true;
+}
+
+void PointCloudAggregator::filterByHeight(const uvec2& subdivisions)
+{
+	for (GLuint ssbo : _visibilitySSBO)
+	{
+		glDeleteBuffers(1, &ssbo);
+	}
+	_visibilitySSBO.clear();
+
+	int chunk = 0, accumSize = 0, numCells = subdivisions.x * subdivisions.y;
+	const int numGroupsGrid = ComputeShader::getNumGroups(subdivisions.x * subdivisions.y);
+	AABB aabb = _pointCloud->getAABB();
+	vec3 cellSize = aabb.size() / vec3(subdivisions.x, subdivisions.y, 1);
+	GLuint gridSSBO = ComputeShader::setWriteBuffer(uint64_t(), subdivisions.x * subdivisions.y, GL_DYNAMIC_DRAW);
+	std::vector<std::vector<uint8_t>> visibility;
+
+	// 1. Fill buffer of 64 bits with UINT64_MAX, i.e. the null index is UINT_MAX
+	_resetDepthBufferShader->bindBuffers(std::vector<GLuint> { gridSSBO });
+	_resetDepthBufferShader->use();
+	_resetDepthBufferShader->setUniform("windowSize", subdivisions);
+	_resetDepthBufferShader->execute(numGroupsGrid, 1, 1, ComputeShader::getMaxGroupSize(), 1, 1);
+
+	for (GLuint pointsSSBO : _pointCloudSSBO)
+	{
+		const unsigned numPoints = _pointCloudChunkSize[chunk];
+		const int numGroupsPoints = ComputeShader::getNumGroups(numPoints);
+
+		// 2. Transform points and use atomicMin to retrieve the nearest point
+		_projectionFilterShader->bindBuffers(std::vector<GLuint> { gridSSBO, pointsSSBO });
+		_projectionFilterShader->use();
+		_projectionFilterShader->setUniform("cellSize", cellSize);
+		_projectionFilterShader->setUniform("minimumPoint", aabb.min());
+		_projectionFilterShader->setUniform("numPoints", numPoints);
+		_projectionFilterShader->setUniform("shift", unsigned(accumSize));
+		_projectionFilterShader->setUniform("windowSize", subdivisions);
+		_projectionFilterShader->execute(numGroupsPoints, 1, 1, ComputeShader::getMaxGroupSize(), 1, 1);
+
+		accumSize += _pointCloudChunkSize[chunk++];
+	}
+
+	unsigned maxChunkSize = _pointCloudChunkSize[0], visiblePoint, shift;
+	uint64_t* gridData = ComputeShader::readData(gridSSBO, uint64_t());
+
+	for (int chunkIdx = 0; chunkIdx < _pointCloudSSBO.size(); ++chunkIdx)
+	{
+		std::vector<uint8_t> visibilityLocal(_pointCloudChunkSize[chunkIdx], 0);
+		visibility.push_back(visibilityLocal);
+	}
+
+	for (int pointIdx = 0; pointIdx < numCells; ++pointIdx)
+	{
+		if (gridData[pointIdx] != 0xffffffffffffffff)
+		{
+			visiblePoint = gridData[pointIdx] & 0xffffffff;
+			chunk = std::floor(visiblePoint / maxChunkSize);
+			shift = visiblePoint % maxChunkSize;
+			visibility[chunk][shift] = uint8_t(1);
+		}
+	}
+
+	if (PointCloudParameters::_buildDTM)
+	{
+		float minHeight = FLT_MAX, maxHeight = FLT_MIN;
+		std::vector<GLubyte> image(numCells * 4, 0);
+		std::vector<float> height;
+		std::vector<PointCloud::PointModel>* points = _pointCloud->getPoints();
+
+		for (int pointIdx = 0; pointIdx < numCells; ++pointIdx)
+		{
+			if (gridData[pointIdx] != 0xffffffffffffffff)
+			{
+				visiblePoint = gridData[pointIdx] & 0xffffffff;
+				height.push_back(points->at(visiblePoint)._point.z);
+				minHeight = (std::min)(minHeight, points->at(visiblePoint)._point.z);
+				maxHeight = (std::max)(maxHeight, points->at(visiblePoint)._point.z);
+			}
+			else
+			{
+				height.push_back(0);
+			}
+		}
+
+		for (int pointIdx = 0; pointIdx < numCells; ++pointIdx)
+		{
+			image[pointIdx * 4 + 0] = glm::clamp((height[pointIdx] - minHeight) / (maxHeight - minHeight), .0f, 1.0f) * 255.0f;
+			image[pointIdx * 4 + 1] = image[pointIdx * 4 + 0];
+			image[pointIdx * 4 + 2] = image[pointIdx * 4 + 0];
+			image[pointIdx * 4 + 3] = (height[pointIdx] > glm::epsilon<float>()) ? 255 : 0;
+		}
+
+		Image* imageWrapper = new Image(image.data(), subdivisions.x, subdivisions.y, 4);
+		imageWrapper->saveImage("DTM.png");
+	}
+
+	for (int chunkIdx = 0; chunkIdx < _pointCloudSSBO.size(); ++chunkIdx)
+	{
+		_visibilitySSBO.push_back(ComputeShader::setReadBuffer(visibility[chunkIdx]));
+	}
+
+	glDeleteBuffers(1, &gridSSBO);
 }
 
 void PointCloudAggregator::render(const mat4& projectionMatrix)
@@ -124,8 +230,14 @@ void PointCloudAggregator::deletePointCloudBuffers()
 		glDeleteBuffers(1, &ssbo);
 	}
 
+	for (GLuint ssbo : _visibilitySSBO)
+	{
+		glDeleteBuffers(1, &ssbo);
+	}
+
 	_pointCloudSSBO.clear();
 	_pointCloudChunkSize.clear();
+	_visibilitySSBO.clear();
 }
 
 void PointCloudAggregator::projectPointCloud(const mat4& projectionMatrix)
@@ -158,6 +270,7 @@ void PointCloudAggregator::projectPointCloud(const mat4& projectionMatrix)
 
 void PointCloudAggregator::projectPointCloudHQR(const mat4& projectionMatrix)
 {
+	std::string colorUniform = "rgbColor", visibilityUniform = "visibilityCheck";
 	unsigned chunk = 0, accumSize = 0;
 	const int numGroupsImage = ComputeShader::getNumGroups(_windowSize.x * _windowSize.y);
 
@@ -169,15 +282,30 @@ void PointCloudAggregator::projectPointCloudHQR(const mat4& projectionMatrix)
 
 	for (GLuint pointsSSBO : _pointCloudSSBO)
 	{
+		const vec2 minMaxHeight = vec2(_pointCloud->getAABB().min().z, _pointCloud->getAABB().max().z);
 		const unsigned numPoints = _pointCloudChunkSize[chunk];
 		const int numGroupsPoints = ComputeShader::getNumGroups(numPoints);
 
 		// 2. Transform points and use atomicMin to retrieve the nearest point
-		_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO });
+
+		if (!_renderingParameters->_filterByHeight)
+			visibilityUniform = "noVisibilityCheck";
+
+		if (chunk >= _visibilitySSBO.size())
+			_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO });
+		else
+			_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO, _visibilitySSBO[chunk] });
+
 		_projectionHQRShader->use();
+		_projectionHQRShader->setUniform("calculatedVisibility", unsigned(!_visibilitySSBO.empty()));
 		_projectionHQRShader->setUniform("cameraMatrix", projectionMatrix);
+		_projectionHQRShader->setUniform("classRange", _renderingParameters->_classRange);
+		//_projectionHQRShader->setUniform("maxReturns", _pointCloud->getMaxReturns());
 		_projectionHQRShader->setUniform("numPoints", numPoints);
 		_projectionHQRShader->setUniform("windowSize", _windowSize);
+		_projectionHQRShader->setUniform("returnFactor", _renderingParameters->_returnFactor);
+		_projectionHQRShader->setSubroutineUniform(GL_COMPUTE_SHADER, "visibilityUniform", visibilityUniform);
+		_projectionHQRShader->applyActiveSubroutines();
 		_projectionHQRShader->execute(numGroupsPoints, 1, 1, ComputeShader::getMaxGroupSize(), 1, 1);
 
 		// 3. Accumulate colors once the minimum depth is defined
@@ -187,6 +315,37 @@ void PointCloudAggregator::projectPointCloudHQR(const mat4& projectionMatrix)
 		_addColorsHQRShader->setUniform("distanceThreshold", PointCloudParameters::_distanceThreshold);
 		_addColorsHQRShader->setUniform("numPoints", numPoints);
 		_addColorsHQRShader->setUniform("windowSize", _windowSize);
+
+		{
+			if (_renderingParameters->_visualizationMode == RenderingParameters::RGB)
+			{
+				if (_renderingParameters->_normalizedColor)
+				{
+					_addColorsHQRShader->setUniform("minMaxColor", vec2(_pointCloud->getMinColor(), _pointCloud->getMaxColor()));
+					colorUniform = "rgbNormalizedColor";
+				}
+			}
+			else if (_renderingParameters->_visualizationMode == RenderingParameters::HEIGHT)
+			{
+				_addColorsHQRShader->setUniform("minMaxHeight", minMaxHeight);
+				_inferno->applyTexture(_addColorsHQRShader, 0, "paletteTexture");
+				colorUniform = "heightColor";
+			}
+			else if (_renderingParameters->_visualizationMode == RenderingParameters::NORMAL)
+			{
+				_inferno->applyTexture(_addColorsHQRShader, 0, "paletteTexture");
+				colorUniform = "normalColor";
+			}
+			else if (_renderingParameters->_visualizationMode == RenderingParameters::CLASS)
+			{
+				_addColorsHQRShader->setUniform("maxClassId", _pointCloud->getMaxClassId());
+				_inferno->applyTexture(_addColorsHQRShader, 0, "paletteTexture");
+				colorUniform = "classColor";
+			}
+		}
+
+		_addColorsHQRShader->setSubroutineUniform(GL_COMPUTE_SHADER, "colorUniform", colorUniform);
+		_addColorsHQRShader->applyActiveSubroutines();
 		_addColorsHQRShader->execute(numGroupsPoints, 1, 1, ComputeShader::getMaxGroupSize(), 1, 1);
 
 		accumSize += _pointCloudChunkSize[chunk++];

@@ -7,7 +7,6 @@
 #include "Graphics/Core/Group3D.h"
 #include "Graphics/Core/Light.h"
 #include "Graphics/Core/Model3D.h"
-#include "Graphics/Core/PlanarSurface.h"
 #include "Graphics/Core/ShaderProgram.h"
 #include "Graphics/Core/SSAOFBO.h"
 #include "Interface/Window.h"
@@ -30,12 +29,7 @@ protected:
 	Group3D*							_sceneGroup;					//!< Model wrapper
 
 	// [FBO]
-	std::vector<bool>					_computeShadowMap;				//!< Boolean value which determines if the shadow map must be computed again for a light
 	GLuint								_nextFramebufferID;				//!< Framebuffer where we will render the next scene
-
-	// [SSAO]
-	SSAOFBO*							_ssaoFBO;						//!< FBO for ambient occlusion	
-	Window*								_window;						//!< Source of queries for window size, etc
 
 protected:
 	/**
@@ -65,20 +59,6 @@ protected:
 	*	@param rendParams Rendering parameters to be taken into account.
 	*/
 	virtual void drawAsTriangles(Camera* camera, const mat4& mModel, RenderingParameters* rendParams);
-
-	/**
-	*	@brief Renders the scene so that every fragment take the color of its position.
-	*	@param mModel Additional model matrix to be applied over the initial model matrix.
-	*	@param rendParams Rendering parameters to be taken into account.
-	*/
-	virtual void drawAsTriangles4Position(const mat4& mModel, RenderingParameters* rendParams);
-
-	/**
-	*	@brief Renders the scene so that every fragment take the color of its normal.
-	*	@param mModel Additional model matrix to be applied over the initial model matrix.
-	*	@param rendParams Rendering parameters to be taken into account.
-	*/
-	virtual void drawAsTriangles4Normal(const mat4& mModel, RenderingParameters* rendParams);
 
 	/**
 	*	@brief Renders the scene as a set of triangles with no textures.
@@ -116,24 +96,6 @@ protected:
 	*/
 	virtual void drawSceneAsTriangles(RenderingShader* shader, RendEnum::RendShaderTypes shaderType, std::vector<mat4>* matrix, RenderingParameters* rendParams);
 
-	/**
-	*	@brief Decides which objects are going to be rendered as a triangle mesh. Only the normal is calculated for each fragment.
-	*	@param shader Rendering shader which is drawing the scene.
-	*	@param shaderType Unique ID of "shader".
-	*	@param matrix Vector of matrices, including view, projection, etc.
-	*	@param rendParams Parameters which indicates how the scene is rendered.
-	*/
-	virtual void drawSceneAsTriangles4Normal(RenderingShader* shader, RendEnum::RendShaderTypes shaderType, std::vector<mat4>* matrix, RenderingParameters* rendParams);
-
-	/**
-	*	@brief Decides which objects are going to be rendered as a triangle mesh. Only the position is calculated for each fragment.
-	*	@param shader Rendering shader which is drawing the scene.
-	*	@param shaderType Unique ID of "shader".
-	*	@param matrix Vector of matrices, including view, projection, etc.
-	*	@param rendParams Parameters which indicates how the scene is rendered.
-	*/
-	virtual void drawSceneAsTriangles4Position(RenderingShader* shader, RendEnum::RendShaderTypes shaderType, std::vector<mat4>* matrix, RenderingParameters* rendParams);
-
 	// --------------- SSAO -----------------
 	
 	/**
@@ -145,11 +107,6 @@ protected:
 	*	@brief Draws both the SSAO texture and RGB scene together.
 	*/
 	void composeScene();
-
-	/**
-	*	@brief Builds the SSAO texture.
-	*/
-	void drawSSAOScene();
 
 	// --------------- Load ----------------
 

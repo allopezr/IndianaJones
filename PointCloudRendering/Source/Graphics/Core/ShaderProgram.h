@@ -139,6 +139,13 @@ public:
 	bool setUniform(const std::string& name, const vec2& value);
 
 	/**
+	*	@brief Modifies the value of a signed Vector2 uniform.
+	*	@param name Name of uniform.
+	*	@param value Value of uniform.
+	*/
+	bool setUniform(const std::string& name, const ivec2& value);
+
+	/**
 	*	@brief Modifies the value of an unsigned Vector2 uniform.
 	*	@param name Name of uniform.
 	*	@param value Value of uniform.

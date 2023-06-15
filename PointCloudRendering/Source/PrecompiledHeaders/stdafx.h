@@ -2,14 +2,12 @@
 
 // [Libraries]
 
+#include "CSF/src/CSF.h"
 #include "GL/glew.h"								// Don't swap order between GL and GLFW includes!
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/constants.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-
-// [Image]
-
 #include "lodepng.h"
 
 // [Standard libraries: basic]
@@ -38,11 +36,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-
-// [Noise]
-
-#include "FastNoise/FastNoise.h"
-#include "FastNoise/FastNoiseMetadata.h"
 
 // [Our own classes]
 

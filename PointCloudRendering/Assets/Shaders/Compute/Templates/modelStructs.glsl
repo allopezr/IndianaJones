@@ -37,4 +37,7 @@ struct PointModel
 {
 	vec3	point;
 	uint	rgb;
+
+	vec3	normal;
+	uint	returnClassData;
 };

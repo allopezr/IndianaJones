@@ -8,15 +8,13 @@
 
 Scene::Scene():
 	_cameraManager(std::unique_ptr<CameraManager>(new CameraManager())), _sceneGroup(nullptr),
-	_nextFramebufferID(0), _ssaoFBO(new SSAOFBO())
+	_nextFramebufferID(0)
 {
-	_window = Window::getInstance();
 }
 
 Scene::~Scene()
 {
 	delete _sceneGroup;
-	delete _ssaoFBO;
 }
 
 void Scene::load()
@@ -34,39 +32,14 @@ void Scene::modifyNextFramebufferID(const GLuint fboID)
 void Scene::modifySize(const uint16_t width, const uint16_t height)
 {
 	_cameraManager->getActiveCamera()->setRaspect(width, height);
-	_ssaoFBO->modifySize(width, height);
 }
 
 void Scene::render(const mat4& mModel, RenderingParameters* rendParams)
 {
 	Camera* activeCamera = _cameraManager->getActiveCamera();
 
-	this->drawAsTriangles4Shadows(mModel, rendParams);
-
-	if (rendParams->_ambientOcclusion)
-	{
-		_ssaoFBO->bindMultisamplingFBO();
-		this->drawAsTriangles(mModel, rendParams);
-		_ssaoFBO->writeGBuffer(0);
-
-		_ssaoFBO->bindGBufferFBO(1);
-		if (rendParams->_showTriangleMesh) this->drawAsTriangles4Position(mModel, rendParams);
-
-		_ssaoFBO->bindGBufferFBO(2);
-		if (rendParams->_showTriangleMesh) this->drawAsTriangles4Normal(mModel, rendParams);
-
-		_ssaoFBO->bindSSAOFBO();
-		this->drawSSAOScene();
-
-		this->bindDefaultFramebuffer(rendParams);
-		this->composeScene();
-	}
-	else
-	{
-		this->bindDefaultFramebuffer(rendParams);
-
-		this->drawAsTriangles(mModel, rendParams);
-	}
+	this->bindDefaultFramebuffer(rendParams);
+	this->drawAsPoints(mModel, rendParams);
 }
 
 // [Protected methods]
@@ -153,40 +126,6 @@ void Scene::drawAsTriangles(Camera* camera, const mat4& mModel, RenderingParamet
 	glDepthFunc(GL_LESS);
 }
 
-void Scene::drawAsTriangles4Position(const mat4& mModel, RenderingParameters* rendParams)
-{
-	Camera* activeCamera = _cameraManager->getActiveCamera(); if (!activeCamera) return;
-	RenderingShader* shader = ShaderList::getInstance()->getRenderingShader(RendEnum::TRIANGLE_MESH_POSITION_SHADER);
-	std::vector<mat4> matrix(RendEnum::numMatricesTypes());
-
-	{
-		matrix[RendEnum::MODEL_MATRIX] = mModel;
-		matrix[RendEnum::VIEW_MATRIX] = activeCamera->getViewMatrix();
-		matrix[RendEnum::VIEW_PROJ_MATRIX] = activeCamera->getViewProjMatrix();
-
-		shader->use();
-
-		this->drawSceneAsTriangles4Position(shader, RendEnum::TRIANGLE_MESH_POSITION_SHADER, &matrix, rendParams);
-	}
-}
-
-void Scene::drawAsTriangles4Normal(const mat4& mModel, RenderingParameters* rendParams)
-{
-	Camera* activeCamera = _cameraManager->getActiveCamera(); if (!activeCamera) return;
-	RenderingShader* shader = ShaderList::getInstance()->getRenderingShader(RendEnum::TRIANGLE_MESH_NORMAL_SHADER);
-	std::vector<mat4> matrix(RendEnum::numMatricesTypes());
-
-	{
-		matrix[RendEnum::MODEL_MATRIX] = mModel;
-		matrix[RendEnum::VIEW_MATRIX] = activeCamera->getViewMatrix();
-		matrix[RendEnum::VIEW_PROJ_MATRIX] = activeCamera->getViewProjMatrix();
-
-		shader->use();
-
-		this->drawSceneAsTriangles4Normal(shader, RendEnum::TRIANGLE_MESH_POSITION_SHADER, &matrix, rendParams);
-	}
-}
-
 void Scene::drawAsTriangles4Shadows(const mat4& mModel, RenderingParameters* rendParams)
 {
 	Camera* activeCamera = _cameraManager->getActiveCamera(); if (!activeCamera) return;
@@ -206,7 +145,7 @@ void Scene::drawAsTriangles4Shadows(const mat4& mModel, RenderingParameters* ren
 	{
 		Light* light = _lights[i].get();
 
-		if (light->shouldCastShadows() && _computeShadowMap[i])
+		if (light->shouldCastShadows())
 		{
 			ShadowMap* shadowMap = light->getShadowMap();
 			const ivec2 size = shadowMap->getSize();
@@ -221,8 +160,6 @@ void Scene::drawAsTriangles4Shadows(const mat4& mModel, RenderingParameters* ren
 			matrix[RendEnum::VIEW_PROJ_MATRIX] = light->getCamera()->getViewProjMatrix();
 
 			_sceneGroup->drawAsTriangles4Shadows(shader, RendEnum::SHADOWS_SHADER, matrix);
-
-			_computeShadowMap[i] = false;
 		}
 	}
 
@@ -246,16 +183,6 @@ void Scene::drawSceneAsTriangles(RenderingShader* shader, RendEnum::RendShaderTy
 	_sceneGroup->drawAsTriangles(shader, shaderType, *matrix);
 }
 
-void Scene::drawSceneAsTriangles4Normal(RenderingShader* shader, RendEnum::RendShaderTypes shaderType, std::vector<mat4>* matrix, RenderingParameters* rendParams)
-{
-	_sceneGroup->drawAsTriangles4Shadows(shader, shaderType, *matrix);
-}
-
-void Scene::drawSceneAsTriangles4Position(RenderingShader* shader, RendEnum::RendShaderTypes shaderType, std::vector<mat4>* matrix, RenderingParameters* rendParams)
-{
-	_sceneGroup->drawAsTriangles4Shadows(shader, shaderType, *matrix);
-}
-
 void Scene::bindDefaultFramebuffer(RenderingParameters* rendParams)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _nextFramebufferID);
@@ -265,28 +192,6 @@ void Scene::bindDefaultFramebuffer(RenderingParameters* rendParams)
 
 void Scene::composeScene()
 {
-	RenderingShader* shader = ShaderList::getInstance()->getRenderingShader(RendEnum::BLUR_SSAO_SHADER);
-	shader->use();
-
-	_ssaoFBO->bindSSAOTexture(shader);
-
-	VAO* quadVAO = Primitives::getQuadVAO();
-	quadVAO->drawObject(RendEnum::IBO_TRIANGLE_MESH, GL_TRIANGLES, 2 * 4);			// 2 triangles with 3 indices + 1 boundary index
-}
-
-void Scene::drawSSAOScene()
-{
-	Camera* activeCamera = _cameraManager->getActiveCamera(); if (!activeCamera) return;
-	RenderingShader* shader = ShaderList::getInstance()->getRenderingShader(RendEnum::SSAO_SHADER);
-	shader->use();
-
-	_ssaoFBO->bindGBufferTextures(shader);
-	Model3D::bindSSAOTextures(shader);
-	shader->setUniform("windowSize", vec2(_window->getSize()));
-	shader->setUniform("mProjMatrix", activeCamera->getProjectionMatrix());
-
-	VAO* quadVAO = Primitives::getQuadVAO();
-	quadVAO->drawObject(RendEnum::IBO_TRIANGLE_MESH, GL_TRIANGLES, 2 * 4);		
 }
 
 void Scene::loadCameras()
@@ -299,9 +204,4 @@ void Scene::loadCameras()
 
 void Scene::loadLights()
 {
-	_computeShadowMap = std::vector<bool>(_lights.size());
-	for (unsigned int i = 0; i < _computeShadowMap.size(); ++i)
-	{
-		_computeShadowMap[i] = true;
-	}
 }

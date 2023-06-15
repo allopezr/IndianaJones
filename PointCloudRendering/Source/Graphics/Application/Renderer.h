@@ -2,7 +2,6 @@
 
 #include "Graphics/Application/CameraManager.h"
 #include "Graphics/Application/GraphicsAppEnumerations.h"
-#include "Graphics/Application/SSAOScene.h"
 #include "Graphics/Application/RenderingParameters.h"
 #include "Graphics/Application/Scene.h"
 #include "Graphics/Core/Camera.h"
@@ -31,7 +30,7 @@ protected:
 	// [Rendering]
 	uint8_t										_currentScene;			//!< Active scene
 	std::unique_ptr<FBOScreenshot>				_screenshotFBO;			//!< Framebuffer which allows us to capture the scene (and save it) at higher resolution
-	std::vector<std::unique_ptr<SSAOScene>>	_scene;					//!< Array of scenes which can be represented. Components are only initialized when asked for
+	std::vector<std::unique_ptr<Scene>>		_scene;						//!< Array of scenes which can be represented. Components are only initialized when asked for
 	std::unique_ptr<RenderingParameters>		_state;					//!< Properties of rendering
 
 protected:
@@ -44,12 +43,7 @@ protected:
 	*	@brief Creates an scene taking into account the type from the arguments.
 	*	@param sceneType Index-name of scene type.
 	*/
-	SSAOScene* createScene(const uint8_t sceneType);
-
-	/**
-	*	@brief Reads the index of the scene which needs to be loaded at first.
-	*/
-	uint8_t readSceneIndex();
+	Scene* createScene(const uint8_t sceneType);
 
 public:
 	/**
@@ -84,7 +78,7 @@ public:
 	/**
 	*	@return Currently active scene.
 	*/
-	SSAOScene* getCurrentScene() { return _scene[_currentScene].get(); }
+	Scene* getCurrentScene() { return _scene[_currentScene].get(); }
 
 	/**
 	*	@return Wrapping class for rendering parameters (unique instance per renderer).

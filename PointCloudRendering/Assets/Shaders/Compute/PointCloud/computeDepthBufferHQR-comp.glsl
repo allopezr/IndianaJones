@@ -1,5 +1,6 @@
 #version 450
 
+#extension GL_NV_gpu_shader5 : enable
 #extension GL_ARB_compute_variable_group_size: enable
 #extension GL_NV_shader_thread_group : require
 #extension GL_NV_shader_thread_shuffle : require
@@ -12,10 +13,30 @@ layout (local_size_variable) in;
 
 layout (std430, binding = 0) buffer DepthBuffer { uint			depthBuffer[]; };
 layout (std430, binding = 1) buffer PointBuffer { PointModel	points[]; };
+layout (std430, binding = 2) buffer VisibilityBuffer { uint8_t	visibility[]; };
 
+uniform uint	calculatedVisibility;
 uniform mat4	cameraMatrix;
+uniform ivec2	classRange;
+uniform float	maxReturns;
 uniform uint	numPoints;
+uniform float	returnFactor;
 uniform uvec2	windowSize;
+
+subroutine bool visibilityType(uint index);
+subroutine uniform visibilityType visibilityUniform;
+
+subroutine(visibilityType)
+bool visibilityCheck(uint index)
+{
+	return calculatedVisibility == 1 && visibility[index] == uint8_t(0);
+}
+
+subroutine(visibilityType)
+bool noVisibilityCheck(uint index)
+{
+	return false;
+}
 
 
 void main()
@@ -27,7 +48,11 @@ void main()
 	vec4 projectedPoint	= cameraMatrix * vec4(points[index].point, 1.0f);
 	projectedPoint.xyz /= projectedPoint.w;
 
-	if (projectedPoint.w <= 0.0 || projectedPoint.x < -1.0 || projectedPoint.x > 1.0 || projectedPoint.y < -1.0 || projectedPoint.y > 1.0) 
+	vec4 returnClassId = unpackUnorm4x8(points[index].returnClassData);
+	float pointReturnFactor = returnClassId.x / returnClassId.y;
+
+	if (projectedPoint.w <= 0.0 || projectedPoint.x < -1.0 || projectedPoint.x > 1.0 || projectedPoint.y < -1.0 || projectedPoint.y > 1.0 
+		|| pointReturnFactor < returnFactor || returnClassId.z * 256.0f < classRange.x || returnClassId.z * 256.0f > classRange.y || visibilityUniform(index))
 	{
 		return;
 	}

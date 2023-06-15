@@ -118,12 +118,6 @@
     <Filter Include="Archivos de origen\Noise\Library">
       <UniqueIdentifier>{ad0529e1-e42e-4cc5-a932-de9474dfd91d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de encabezado\Graphics\Core\Image\Library">
-      <UniqueIdentifier>{d103c7a5-0792-4df0-968e-70ab15b3325e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Graphics\Core\Image\Library">
-      <UniqueIdentifier>{2e2e6c73-b1a2-4aca-9dbc-c5c325b3c69f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de recursos\Shaders">
       <UniqueIdentifier>{c6d26eee-5873-4a69-9b4f-1b04cb44f667}</UniqueIdentifier>
     </Filter>
@@ -178,38 +172,8 @@
     <Filter Include="Archivos de recursos\Shaders\2D">
       <UniqueIdentifier>{4b899a43-f1cb-48fc-b0af-0ef468eedf5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de encabezado\ImportedLibraries\imgui">
-      <UniqueIdentifier>{4068615d-735c-4ea4-9596-be14111e6b15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de encabezado\ImportedLibraries\tinyply">
-      <UniqueIdentifier>{894f38f0-78a4-45a4-a0f6-8fdd0411962c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de encabezado\ImportedLibraries\objloader">
-      <UniqueIdentifier>{c6c35763-144d-4277-b7cf-19e20f813de3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\ImportedLibraries\imgui">
-      <UniqueIdentifier>{e07c7844-6adb-4154-b0f3-c51174ac09c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\ImportedLibraries\tinyply">
-      <UniqueIdentifier>{1f1d3d30-42b2-4d07-9e33-0813cf704aae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\ImportedLibraries\objloader">
-      <UniqueIdentifier>{f25f865e-3383-45e9-83eb-7064c916f5b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\ImportedLibraries\spline">
-      <UniqueIdentifier>{e8772171-0032-4e02-a7c8-a880a9d9345c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de recursos\Shaders\Compute\Model\PlanarSurface">
       <UniqueIdentifier>{fa8b8cdf-4b5f-4812-97f2-164a95f7b37d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de recursos\Shaders\Compute\BVH Build">
-      <UniqueIdentifier>{e5a67437-04f9-4a02-a138-25ac99c13c3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de recursos\Shaders\Compute\BVH Build\RadixSort">
-      <UniqueIdentifier>{d0d16257-fff8-4cec-a88c-87c77aea072b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de recursos\Shaders\Compute\BVH Build\PrefixScan">
-      <UniqueIdentifier>{4cd246b8-4add-41f2-9e60-80a5520286d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Archivos de encabezado\Interface\Fonts">
       <UniqueIdentifier>{951ef8f6-0828-4c6c-a24e-b8adf387c3a9}</UniqueIdentifier>
@@ -219,18 +183,6 @@
     </Filter>
     <Filter Include="Archivos de origen\Noise\Library\PrecompiledHeaders">
       <UniqueIdentifier>{eb986ef2-7ed8-4ac8-b464-ff60fa75501f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de encabezado\ImportedLibraries\implot">
-      <UniqueIdentifier>{c2fc8531-5b67-44d9-9009-0c7c7434d77d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\ImportedLibraries\implot">
-      <UniqueIdentifier>{a87165dc-88b7-470c-9d4d-e4be9d2289d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\ImportedLibraries\imnodes">
-      <UniqueIdentifier>{bcfb45d1-5161-4934-a745-2a4aec13272b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de encabezado\ImportedLibraries\imnodes">
-      <UniqueIdentifier>{32b46b58-445c-46c2-aa80-e86a809d8ccd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Archivos de recursos\Shaders\Compute\PointCloud">
       <UniqueIdentifier>{7ba0baa1-ba2f-40d9-881e-409d3bf636c5}</UniqueIdentifier>
@@ -384,9 +336,6 @@
     <ClInclude Include="Source\Geometry\3D\TriangleMesh.h">
       <Filter>Archivos de encabezado\Geometry\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Core\PlanarSurface.h">
-      <Filter>Archivos de encabezado\Graphics\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Geometry\3D\Plane.h">
       <Filter>Archivos de encabezado\Geometry\3D</Filter>
     </ClInclude>
@@ -426,32 +375,11 @@
     <ClInclude Include="Source\Utilities\ChronoUtilities.h">
       <Filter>Archivos de encabezado\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Libraries\imgui\imconfig.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\imgui\imgui.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\imgui\examples\imgui_impl_glfw.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\imgui\examples\imgui_impl_opengl3.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\imgui\imgui_internal.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\lodepng\lodepng.h">
-      <Filter>Archivos de encabezado\Graphics\Core\Image\Library</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Geometry\Animation\BezierCurve.h">
       <Filter>Archivos de encabezado\Geometry\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Source\Geometry\Animation\Interpolation.h">
       <Filter>Archivos de encabezado\Geometry\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\Application\SSAOScene.h">
-      <Filter>Archivos de encabezado\Graphics\Application</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\Core\ColorUtilities.h">
       <Filter>Archivos de encabezado\Graphics\Core</Filter>
@@ -462,20 +390,11 @@
     <ClInclude Include="Source\Graphics\Application\PointCloudScene.h">
       <Filter>Archivos de encabezado\Graphics\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Core\CADModel.h">
-      <Filter>Archivos de encabezado\Graphics\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\Core\SSAOFBO.h">
       <Filter>Archivos de encabezado\Graphics\Core\FBO</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utilities\RandomUtilities.h">
       <Filter>Archivos de encabezado\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\tinyply\tinyply.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\tinyply</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\objloader\OBJ_Loader.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\objloader</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\Application\TerrainParameters.h">
       <Filter>Archivos de encabezado\Graphics\Application</Filter>
@@ -489,20 +408,8 @@
     <ClInclude Include="Source\Interface\Fonts\lato.hpp">
       <Filter>Archivos de encabezado\Interface\Fonts</Filter>
     </ClInclude>
-    <ClInclude Include="Libraries\imgui\imstb_truetype.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\implot\implot.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\implot</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\implot\implot_internal.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\implot</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Geometry\Animation\CatmullRom.h">
       <Filter>Archivos de encabezado\Geometry\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Libraries\imnodes\imnodes.h">
-      <Filter>Archivos de encabezado\ImportedLibraries\imnodes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\Core\PointCloudAggregator.h">
       <Filter>Archivos de encabezado\Graphics\Core</Filter>
@@ -546,9 +453,6 @@
       <Filter>Archivos de origen\Graphics\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Core\Group3D.cpp">
-      <Filter>Archivos de origen\Graphics\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Core\Light.cpp">
       <Filter>Archivos de origen\Graphics\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Core\Material.cpp">
@@ -632,9 +536,6 @@
     <ClCompile Include="Source\Geometry\3D\TriangleMesh.cpp">
       <Filter>Archivos de origen\Geometry\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Core\PlanarSurface.cpp">
-      <Filter>Archivos de origen\Graphics\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Geometry\3D\Plane.cpp">
       <Filter>Archivos de origen\Geometry\3D</Filter>
     </ClCompile>
@@ -668,29 +569,11 @@
     <ClCompile Include="Source\Geometry\3D\PointCloud3D.cpp">
       <Filter>Archivos de origen\Geometry\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_demo.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\examples\imgui_impl_glfw.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\examples\imgui_impl_opengl3.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\lodepng\lodepng.cpp">
-      <Filter>Archivos de origen\Graphics\Core\Image\Library</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Geometry\Animation\BezierCurve.cpp">
       <Filter>Archivos de origen\Geometry\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Source\Geometry\Animation\Interpolation.cpp">
       <Filter>Archivos de origen\Geometry\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Application\SSAOScene.cpp">
-      <Filter>Archivos de origen\Graphics\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Geometry\Animation\LinearInterpolation.cpp">
       <Filter>Archivos de origen\Geometry\Animation</Filter>
@@ -698,14 +581,8 @@
     <ClCompile Include="Source\Graphics\Application\PointCloudScene.cpp">
       <Filter>Archivos de origen\Graphics\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Core\CADModel.cpp">
-      <Filter>Archivos de origen\Graphics\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\Core\SSAOFBO.cpp">
       <Filter>Archivos de origen\Graphics\Core\FBO</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\objloader\OBJ_Loader.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\objloader</Filter>
     </ClCompile>
     <ClCompile Include="Source\Interface\Fonts\font_awesome_2.cpp">
       <Filter>Archivos de origen\Interface\Fonts</Filter>
@@ -716,32 +593,8 @@
     <ClCompile Include="Source\Interface\Fonts\lato.cpp">
       <Filter>Archivos de origen\Interface\Fonts</Filter>
     </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_draw.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_widgets.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\imgui\imgui_tables.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\implot\implot.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\implot</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\implot\implot_demo.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\implot</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\implot\implot_items.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\implot</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\tinyply\tinyply.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\tinyply</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Geometry\Animation\CatmullRom.cpp">
       <Filter>Archivos de origen\Geometry\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Libraries\imnodes\imnodes.cpp">
-      <Filter>Archivos de origen\ImportedLibraries\imnodes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Core\Antialiser.cpp">
       <Filter>Archivos de origen\Graphics\Core</Filter>
@@ -754,6 +607,9 @@
     </ClCompile>
     <ClCompile Include="Libraries\imfiledialog\ImGuiFileDialog.cpp">
       <Filter>Archivos de origen\ImportedLibraries\imfiledialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Core\Light.cpp">
+      <Filter>Archivos de origen\Graphics\Core\Strategy Pattern\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -781,23 +637,8 @@
     <None Include="Assets\Shaders\Triangles\uniformTriangleMesh-vert.glsl">
       <Filter>Archivos de recursos\Shaders\Triangles</Filter>
     </None>
-    <None Include="Assets\Shaders\Compute\BVHGeneration\buildClusterBuffer-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\BVHGeneration\clusterMerging-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\BVHGeneration\findBestNeighbor-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\BVHGeneration\reallocateClusters-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build</Filter>
-    </None>
     <None Include="Assets\Shaders\Compute\Group\computeGroupAABB-comp.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\Group</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\BVHGeneration\computeMortonCodes-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build</Filter>
     </None>
     <None Include="Assets\Shaders\Compute\Model\computeTangents_1-comp.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\Model</Filter>
@@ -811,29 +652,11 @@
     <None Include="Assets\Shaders\Compute\Model\modelMeshGeneration-comp.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\Model</Filter>
     </None>
-    <None Include="Assets\Shaders\Compute\PrefixScan\downSweep-prefixScan-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build\PrefixScan</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\PrefixScan\reduce-prefixScan-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build\PrefixScan</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\PrefixScan\resetLastPosition-prefixScan-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build\PrefixScan</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\RadixSort\bitMask-radixSort-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build\RadixSort</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\RadixSort\reallocateIndices-radixSort-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build\RadixSort</Filter>
-    </None>
     <None Include="Assets\Shaders\Compute\Templates\modelStructs.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\Templates</Filter>
     </None>
     <None Include="Assets\Shaders\Compute\Generic\resetBufferIndex-comp.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\Generic</Filter>
-    </None>
-    <None Include="Assets\Shaders\Compute\BVHGeneration\endLoopComputations-comp.glsl">
-      <Filter>Archivos de recursos\Shaders\Compute\BVH Build</Filter>
     </None>
     <None Include="Assets\Shaders\Compute\PlanarSurface\planarSurfaceFaces-comp.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\Model\PlanarSurface</Filter>
@@ -908,6 +731,9 @@
       <Filter>Archivos de recursos\Shaders\Compute\PointCloud</Filter>
     </None>
     <None Include="Assets\Shaders\Compute\PointCloud\transferPoints-comp.glsl">
+      <Filter>Archivos de recursos\Shaders\Compute\PointCloud</Filter>
+    </None>
+    <None Include="Assets\Shaders\Compute\PointCloud\computePointIdx-comp.glsl">
       <Filter>Archivos de recursos\Shaders\Compute\PointCloud</Filter>
     </None>
   </ItemGroup>

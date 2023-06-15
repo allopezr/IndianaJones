@@ -14,6 +14,12 @@
 struct RenderingParameters
 {
 public:
+	enum PointCloudRendering
+	{
+		RGB, NORMAL, HEIGHT, CLASS
+	};
+
+public:
 	// Application
 	vec3							_backgroundColor;						//!< Clear color
 	ivec2							_viewportSize;							//!< Viewport size (!= window)
@@ -31,23 +37,18 @@ public:
 	int								_visualizationMode;						//!< Only triangle mesh is defined here
 	
 	// Point cloud
+	ivec2							_classRange;							//!<
+	bool							_filterByHeight;						//!<
+	bool							_normalizedColor;						//!<
+	float							_returnFactor;							//!<
 	float							_scenePointSize;						//!<
 	vec3							_scenePointCloudColor;					//!< Color of point cloud which shows all the vertices
-
-	// Wireframe
-	vec3							_bvhWireframeColor;						//!< Color of BVH structure 
-	vec3							_wireframeColor;						//!< Color of lines in wireframe rendering
 
 	// Triangle mesh
 	bool							_ambientOcclusion;						//!< Boolean value to enable/disable occlusion
 	bool							_renderSemanticConcept;					//!< Boolean value to indicate if rendering semantic concepts is needed
-	int								_semanticRenderingConcept;				//!< ASPRS / Custom semantic concepts (selector)
 
 	// What to see		
-	float							_bvhNodesPercentage;					//!< Percentage of BVH nodes to be rendered (lower percentage means smaller nodes will be rendered)
-	bool							_showBVH;								//!< Render BVH data structure
-	bool							_showTerrainRegularGrid;				//!< Shows a grid with the saturation level of a regular grid
-	bool							_showTriangleMesh;						//!< Render original scene
 	bool							_updateCamera;							//!< Updates camera accordingly to scene AABB
 
 public:
@@ -65,21 +66,16 @@ public:
 		_screenshotFilenameBuffer("Screenshot.png"),
 		_screenshotMultiplier(1.0f),
 
-		_visualizationMode(CGAppEnum::VIS_TRIANGLES),
+		_visualizationMode(0),
 
+		_classRange(0, 256),
+		_filterByHeight(false),
+		_normalizedColor(true),
 		_scenePointSize(2.0f),
 		_scenePointCloudColor(1.0f, .0f, .0f),
 
-		_bvhWireframeColor(1.0f, 1.0f, .0f),
-		_wireframeColor(0.0f),
-
 		_ambientOcclusion(true),
-		_renderSemanticConcept(false),
 
-		_bvhNodesPercentage(1.0f),
-		_showBVH(false),
-		_showTerrainRegularGrid(false),
-		_showTriangleMesh(true),
 		_updateCamera(true)
 	{
 	}

@@ -24,6 +24,7 @@ std::unordered_map<uint8_t, std::string> ShaderList::COMP_SHADER_SOURCE {
 		{RendEnum::PLANAR_SURFACE_TOPOLOGY, "Assets/Shaders/Compute/PlanarSurface/planarSurfaceFaces"},
 		{RendEnum::PROJECTION_SHADER, "Assets/Shaders/Compute/PointCloud/computeDepthBuffer"},
 		{RendEnum::PROJECTION_HQR_SHADER, "Assets/Shaders/Compute/PointCloud/computeDepthBufferHQR"},
+		{RendEnum::PROJECTION_FILTER_SHADER, "Assets/Shaders/Compute/PointCloud/computePointIdx"},
 		{RendEnum::REALLOCATE_CLUSTERS, "Assets/Shaders/Compute/BVHGeneration/reallocateClusters"},
 		{RendEnum::REALLOCATE_RADIX_SORT, "Assets/Shaders/Compute/RadixSort/reallocateIndices-radixSort"},
 		{RendEnum::REDUCE_POINT_BUFFER_SHADER, "Assets/Shaders/Compute/PointCloud/reducePointBuffer"},

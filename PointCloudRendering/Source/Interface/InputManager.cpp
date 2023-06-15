@@ -2,7 +2,6 @@
 #include "InputManager.h"
 
 #include "Geometry/General/BasicOperations.h"
-#include "Graphics/Application/SSAOScene.h"
 #include "Graphics/Application/Renderer.h"
 #include "Graphics/Core/Camera.h"
 #include "Interface/GUI.h"
