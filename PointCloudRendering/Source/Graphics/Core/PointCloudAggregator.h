@@ -19,6 +19,7 @@ protected:
 	PointCloud*				_pointCloud;
 	
 	// SSBO
+	std::vector<GLuint>		_groundSSBO;
 	std::vector<GLuint>		_pointCloudSSBO;
 	std::vector<GLuint>		_pointCloudChunkSize;
 	std::vector<GLuint>		_visibilitySSBO;
@@ -123,6 +124,11 @@ public:
 	*	@brief Modifies size of buffer affected by the size of the window. 
 	*/
 	void changedSize(const uint16_t width, const uint16_t height);
+
+	/**
+	*	@brief Filters point cloud following the CSF outcome.
+	*/
+	void filterByGround(const std::vector<GLint>& groundIndices);
 
 	/**
 	*	@brief Filters point cloud by selecting the one with minimum height at each cell.

@@ -38,6 +38,8 @@ public:
 	
 	// Point cloud
 	ivec2							_classRange;							//!<
+	CSF								_csf;									//!<
+	bool							_filterByGround;						//!<
 	bool							_filterByHeight;						//!<
 	bool							_normalizedColor;						//!<
 	float							_returnFactor;							//!<
@@ -69,6 +71,7 @@ public:
 		_visualizationMode(0),
 
 		_classRange(0, 256),
+		_filterByGround(false),
 		_filterByHeight(false),
 		_normalizedColor(true),
 		_scenePointSize(2.0f),
@@ -78,6 +81,12 @@ public:
 
 		_updateCamera(true)
 	{
+		_csf.params.class_threshold = 0.5f;
+		_csf.params.bSloopSmooth = true;
+		_csf.params.cloth_resolution = 0.5f;
+		_csf.params.rigidness = 3;
+		_csf.params.interations = 500;
+		_csf.params.time_step = .65f;
 	}
 };
 

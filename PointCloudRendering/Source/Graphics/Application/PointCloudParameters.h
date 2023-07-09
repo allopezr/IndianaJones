@@ -18,7 +18,7 @@ public:
 	inline static bool		_enableHQR = true;					//!<
 	inline static GLint		_knn = 8;							//!<
 	inline static ivec2		_numGridSubdivisions = ivec2(100);	//!<
-	inline static bool		_sortPointCloud = true;				//!<
+	inline static bool		_sortPointCloud = false;				//!<
 	inline static bool		_reducePointCloud = false;			//!<
 	inline static GLuint	_reduceIterations = 1;				//!<
 };

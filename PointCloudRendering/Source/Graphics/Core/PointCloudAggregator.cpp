@@ -61,6 +61,36 @@ void PointCloudAggregator::changedSize(const uint16_t width, const uint16_t heig
 	_changedWindowSize = true;
 }
 
+void PointCloudAggregator::filterByGround(const std::vector<GLint>& groundIndices)
+{
+	for (GLuint ssbo : _groundSSBO)
+	{
+		glDeleteBuffers(1, &ssbo);
+	}
+	_groundSSBO.clear();
+
+	std::vector<std::vector<uint8_t>> ground;
+	unsigned maxChunkSize = _pointCloudChunkSize[0], shift, chunk;
+
+	for (int chunkIdx = 0; chunkIdx < _pointCloudSSBO.size(); ++chunkIdx)
+	{
+		std::vector<uint8_t> groundLocal(_pointCloudChunkSize[chunkIdx], 0);
+		ground.push_back(groundLocal);
+	}
+
+	for (int pointIdx = 0; pointIdx < groundIndices.size(); ++pointIdx)
+	{
+		chunk = std::floor(groundIndices[pointIdx] / maxChunkSize);
+		shift = (groundIndices[pointIdx] % maxChunkSize);
+		ground[chunk][shift] = uint8_t(1);
+	}
+
+	for (int chunkIdx = 0; chunkIdx < _pointCloudSSBO.size(); ++chunkIdx)
+	{
+		_groundSSBO.push_back(ComputeShader::setReadBuffer(ground[chunkIdx]));
+	}
+}
+
 void PointCloudAggregator::filterByHeight(const uvec2& subdivisions)
 {
 	for (GLuint ssbo : _visibilitySSBO)
@@ -225,6 +255,11 @@ GLuint PointCloudAggregator::calculateMortonCodes(const GLuint pointsSSBO, unsig
 
 void PointCloudAggregator::deletePointCloudBuffers()
 {
+	for (GLuint ssbo : _groundSSBO)
+	{
+		glDeleteBuffers(1, &ssbo);
+	}
+
 	for (GLuint ssbo : _pointCloudSSBO)
 	{
 		glDeleteBuffers(1, &ssbo);
@@ -270,7 +305,7 @@ void PointCloudAggregator::projectPointCloud(const mat4& projectionMatrix)
 
 void PointCloudAggregator::projectPointCloudHQR(const mat4& projectionMatrix)
 {
-	std::string colorUniform = "rgbColor", visibilityUniform = "visibilityCheck";
+	std::string colorUniform = "rgbColor", visibilityUniform = "visibilityCheck", groundUniform = "groundCheck";
 	unsigned chunk = 0, accumSize = 0;
 	const int numGroupsImage = ComputeShader::getNumGroups(_windowSize.x * _windowSize.y);
 
@@ -288,15 +323,25 @@ void PointCloudAggregator::projectPointCloudHQR(const mat4& projectionMatrix)
 
 		// 2. Transform points and use atomicMin to retrieve the nearest point
 
-		if (!_renderingParameters->_filterByHeight)
+		if (!_renderingParameters->_filterByHeight || _visibilitySSBO.empty())
 			visibilityUniform = "noVisibilityCheck";
 
+		if (!_renderingParameters->_filterByGround || _groundSSBO.empty())
+			groundUniform = "noGroundCheck";
+
 		if (chunk >= _visibilitySSBO.size())
-			_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO });
+			if (chunk >= _groundSSBO.size())
+				_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO });
+			else
+				_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO, 0, _groundSSBO[chunk] });
 		else
-			_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO, _visibilitySSBO[chunk] });
+			if (chunk >= _groundSSBO.size())
+				_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO, _visibilitySSBO[chunk], 0 });
+			else
+				_projectionHQRShader->bindBuffers(std::vector<GLuint> { _rawDepthBufferSSBO, pointsSSBO, _visibilitySSBO[chunk], _groundSSBO[chunk] });
 
 		_projectionHQRShader->use();
+		_projectionHQRShader->setUniform("calculatedGround", unsigned(!_groundSSBO.empty()));
 		_projectionHQRShader->setUniform("calculatedVisibility", unsigned(!_visibilitySSBO.empty()));
 		_projectionHQRShader->setUniform("cameraMatrix", projectionMatrix);
 		_projectionHQRShader->setUniform("classRange", _renderingParameters->_classRange);
@@ -305,6 +350,7 @@ void PointCloudAggregator::projectPointCloudHQR(const mat4& projectionMatrix)
 		_projectionHQRShader->setUniform("windowSize", _windowSize);
 		_projectionHQRShader->setUniform("returnFactor", _renderingParameters->_returnFactor);
 		_projectionHQRShader->setSubroutineUniform(GL_COMPUTE_SHADER, "visibilityUniform", visibilityUniform);
+		_projectionHQRShader->setSubroutineUniform(GL_COMPUTE_SHADER, "groundUniform", groundUniform);
 		_projectionHQRShader->applyActiveSubroutines();
 		_projectionHQRShader->execute(numGroupsPoints, 1, 1, ComputeShader::getMaxGroupSize(), 1, 1);
 

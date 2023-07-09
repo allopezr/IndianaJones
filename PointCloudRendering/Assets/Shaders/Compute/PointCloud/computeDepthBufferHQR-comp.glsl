@@ -14,7 +14,9 @@ layout (local_size_variable) in;
 layout (std430, binding = 0) buffer DepthBuffer { uint			depthBuffer[]; };
 layout (std430, binding = 1) buffer PointBuffer { PointModel	points[]; };
 layout (std430, binding = 2) buffer VisibilityBuffer { uint8_t	visibility[]; };
+layout (std430, binding = 3) buffer GroundBuffer { uint8_t		ground[]; };
 
+uniform uint	calculatedGround;
 uniform uint	calculatedVisibility;
 uniform mat4	cameraMatrix;
 uniform ivec2	classRange;
@@ -26,6 +28,9 @@ uniform uvec2	windowSize;
 subroutine bool visibilityType(uint index);
 subroutine uniform visibilityType visibilityUniform;
 
+subroutine bool groundType(uint index);
+subroutine uniform groundType groundUniform;
+
 subroutine(visibilityType)
 bool visibilityCheck(uint index)
 {
@@ -36,6 +41,18 @@ subroutine(visibilityType)
 bool noVisibilityCheck(uint index)
 {
 	return false;
+}
+
+subroutine(groundType)
+bool groundCheck(uint index)
+{
+	return calculatedGround == 1 && ground[index] == uint8_t(1);
+}
+
+subroutine(groundType)
+bool noGroundCheck(uint index)
+{
+	return true;
 }
 
 
@@ -52,7 +69,7 @@ void main()
 	float pointReturnFactor = returnClassId.x / returnClassId.y;
 
 	if (projectedPoint.w <= 0.0 || projectedPoint.x < -1.0 || projectedPoint.x > 1.0 || projectedPoint.y < -1.0 || projectedPoint.y > 1.0 
-		|| pointReturnFactor < returnFactor || returnClassId.z * 256.0f < classRange.x || returnClassId.z * 256.0f > classRange.y || visibilityUniform(index))
+		|| pointReturnFactor < returnFactor || returnClassId.z * 256.0f < classRange.x || returnClassId.z * 256.0f > classRange.y || visibilityUniform(index) || !groundUniform(index))
 	{
 		return;
 	}

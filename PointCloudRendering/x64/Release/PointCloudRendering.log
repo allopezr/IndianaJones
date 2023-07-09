@@ -1,8 +1,13 @@
-﻿  PointCloudAggregator.cpp
+﻿  Constraint.cpp
+  Particle.cpp
+  point_cloud.cpp
+  Rasterization.cpp
+  XYZReader.cpp
      Creando biblioteca C:\Users\allopezr\Documents\GitHub\IndianaJones\x64\Release\PointCloudRendering.lib y objeto C:\Users\allopezr\Documents\GitHub\IndianaJones\x64\Release\PointCloudRendering.exp
   Generando código
-  19 of 5944 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+C:\Users\allopezr\Documents\GitHub\IndianaJones\PointCloudRendering\Source\Graphics\Core\PointCloud.cpp(188): warning C4715: 'PointCloud::loadModelFromLAS': no todas las rutas de acceso de control devuelven un valor
+  377 of 6634 functions ( 5.7%) were compiled, the rest were copied from previous compilation.
+    102 functions were new in current compilation
+    704 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
   PointCloudRendering.vcxproj -> C:\Users\allopezr\Documents\GitHub\IndianaJones\x64\Release\PointCloudRendering.exe

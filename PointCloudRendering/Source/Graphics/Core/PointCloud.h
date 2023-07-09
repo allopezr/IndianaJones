@@ -126,6 +126,11 @@ public:
 	virtual ~PointCloud();
 
 	/**
+	*	@brief
+	*/
+	void filterGround(CSF* csf, std::vector<GLint>& groundIndices);
+
+	/**
 	*	@brief Loads the point cloud, either from a binary or a PLY file.
 	*	@param modelMatrix Model transformation matrix.
 	*	@return True if the point cloud could be properly loaded.

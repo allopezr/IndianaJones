@@ -31,6 +31,14 @@ PointCloudScene::~PointCloudScene()
 	delete _pointCloudAggregator;
 }
 
+void PointCloudScene::filterGround(CSF* csf)
+{
+	std::vector<GLint> groundIndices;
+
+	_pointCloud->filterGround(csf, groundIndices);
+	_pointCloudAggregator->filterByGround(groundIndices);
+}
+
 void PointCloudScene::filterPointCloudByHeight(const uvec2& subdivisions)
 {
 	if (_pointCloudAggregator)

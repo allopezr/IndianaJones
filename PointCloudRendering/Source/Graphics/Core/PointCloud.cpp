@@ -26,6 +26,29 @@ PointCloud::~PointCloud()
 {
 }
 
+void PointCloud::filterGround(CSF* csf, std::vector<GLint>& groundIndices)
+{
+	std::vector<csf::Point> csfPoints;
+	std::vector<GLint> offGroundIndices;
+
+	for (PointModel& point : _points)
+	{
+		csf::Point csfPoint;
+		csfPoint.x = point._point.x;
+		csfPoint.y = point._point.y;
+		csfPoint.z = point._point.z;
+
+		csfPoints.push_back(csfPoint);
+	}
+
+	csf->setPointCloud(csfPoints);
+	csf->do_filtering(groundIndices, offGroundIndices, true);
+
+	std::vector<GLint> indices (1e6);
+	std::iota(indices.begin(), indices.end(), 0);
+	csf->savePoints(indices, "Hola.xyz");
+}
+
 bool PointCloud::load(const mat4& modelMatrix)
 {
 	if (!_loaded)

@@ -252,6 +252,21 @@ void GUI::showRenderingSettings()
 				ImGui::RadioButton("Height", &_renderingParams->_visualizationMode, RenderingParameters::HEIGHT);
 				ImGui::RadioButton("Class", &_renderingParams->_visualizationMode, RenderingParameters::CLASS);
 				ImGui::Checkbox("Filter by Height", &_renderingParams->_filterByHeight);
+				ImGui::Checkbox("Filter by Ground", &_renderingParams->_filterByGround);
+
+				this->leaveSpace(2);
+				ImGui::Text("CSF");
+				ImGui::Separator();
+				this->leaveSpace(1);
+
+				ImGui::Checkbox("Sloop smooth", &_renderingParams->_csf.params.bSloopSmooth);
+				ImGui::SliderFloat("Time step", &_renderingParams->_csf.params.time_step, .0f, 1.1f, "%.3f");
+				ImGui::SliderFloat("Class threshold", &_renderingParams->_csf.params.class_threshold, .0f, 5.0f, "%.3f");
+				ImGui::SliderFloat("Cloth resolution", &_renderingParams->_csf.params.cloth_resolution, .0f, 10.0f, "%.3f");
+				ImGui::SliderInt("Rigidness", &_renderingParams->_csf.params.rigidness, 1, 100);
+				ImGui::SliderInt("Iterations", &_renderingParams->_csf.params.interations, 1, 10000);
+				if (ImGui::Button("Filter ground"))
+					_pointCloudScene->filterGround(&_renderingParams->_csf);
 
 				this->leaveSpace(2);
 				ImGui::Text("Simplify");

@@ -44,9 +44,9 @@
 struct Params {
     // refer to the website:http://ramm.bnu.edu.cn/projects/CSF/ for the setting of these paramters
     bool bSloopSmooth;
-    double time_step;
-    double class_threshold;
-    double cloth_resolution;
+    float time_step;
+    float class_threshold;
+    float cloth_resolution;
     int rigidness;
     int interations;
 };

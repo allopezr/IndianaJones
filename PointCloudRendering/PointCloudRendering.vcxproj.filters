@@ -193,6 +193,12 @@
     <Filter Include="Archivos de origen\ImportedLibraries\imfiledialog">
       <UniqueIdentifier>{3c5184ac-87a6-463e-9bb8-36cfe7fc482e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\ImportedLibraries\CSF">
+      <UniqueIdentifier>{83c545e9-ec99-49eb-bd59-de963efadd21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\ImportedLibraries\CSF">
+      <UniqueIdentifier>{d8151fcd-dfe9-4a3b-b072-d05531e0c063}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Geometry\2D\Vector2.h">
@@ -426,6 +432,33 @@
     <ClInclude Include="Source\Graphics\Application\PointCloudParameters.h">
       <Filter>Archivos de encabezado\Graphics\Application</Filter>
     </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\c2cdist.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\Cloth.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\Constraint.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\CSF.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\Particle.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\point_cloud.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\Rasterization.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\Vec3.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\CSF\src\XYZReader.h">
+      <Filter>Archivos de encabezado\ImportedLibraries\CSF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Geometry\2D\Vector2.cpp">
@@ -610,6 +643,27 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Core\Light.cpp">
       <Filter>Archivos de origen\Graphics\Core\Strategy Pattern\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\CSF.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\Cloth.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\Constraint.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\Particle.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\point_cloud.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\Rasterization.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
+    </ClCompile>
+    <ClCompile Include="Libraries\CSF\src\XYZReader.cpp">
+      <Filter>Archivos de origen\ImportedLibraries\CSF</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

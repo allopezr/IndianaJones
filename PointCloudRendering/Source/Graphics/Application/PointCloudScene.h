@@ -79,6 +79,11 @@ public:
 	virtual ~PointCloudScene();
 
 	/**
+	*	@brief 
+	*/
+	void filterGround(CSF* csf);
+
+	/**
 	*	@brief
 	*/
 	void filterPointCloudByHeight(const uvec2& subdivisions);
